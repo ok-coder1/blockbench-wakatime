@@ -17,6 +17,14 @@ BBPlugin.register('wakatime', {
     min_version: '4.6.0',
     variant: 'desktop',
     onload() {
+        deletables.push(new Setting('wakatime_api_url', {
+            name: 'WakaTime API URL',
+            category: 'general',
+            description: 'Your WakaTime API URL, if you are using a custom one',
+            type: 'text',
+            value: 'https://api.wakatime.com/api/v1/users/current/heartbeats'
+        }));
+        
         // Register API key setting and get the value
         deletables.push(new Setting('wakatime_api_key', {
             name: 'WakaTime API Key',
@@ -73,7 +81,7 @@ async function sendHeartbeat() {
         '--project', project.getDisplayName()
     ];
 
-    const url = 'https://api.wakatime.com/api/v1/users/current/heartbeats';
+    const url = Settings.get('wakatime_api_key') ?? '';
     const body = JSON.stringify({
         project: project.getDisplayName(),
     });
